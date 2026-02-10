@@ -44,6 +44,8 @@ int main()
             imprimir_lista(cabeza);
             break;
         case 4:
+            printf("\nSaliendo del programa...\n");
+            system("pause");
             break;
         default:
             printf("ERROR. Opcion incorrecta.\n");
@@ -160,7 +162,7 @@ void eliminar_elemento(NODO **cabeza)
         // Llego al final sin hallarlo
         if (actual == NULL)
         {
-            printf("No se encontro nodo con el valor ingresado.");
+            printf("No se encontro nodo con el valor ingresado.\n");
         }
 
         // Si hallo el nodo a eliminar
@@ -196,7 +198,7 @@ void eliminar_elemento(NODO **cabeza)
 
             // Borrar el nodo
             free(actual);
-            printf("Valor eliminado correctamente.");
+            printf("Valor eliminado correctamente.\n");
         }
     }
     system("pause");
@@ -210,51 +212,71 @@ void agregar_elemento(NODO **cabeza)
     // Apuntadores de trabajo
     NODO *previo = NULL, *actual = NULL;
     NODO *nuevo = malloc(sizeof(NODO));
+    previo=NULL;
+    actual = *cabeza;
+
+    // verificar que se halla reservado espacio en memoria
     if (nuevo != NULL)
     {
+        // Asignacion inicial de valores del nodo nuevo
         nuevo->anterior = NULL;
         printf("DATO A AGREGAR\n");
         nuevo->dato = solicitar_entero();
         nuevo->siguiente = NULL;
 
-        if (*cabeza == NULL)
+        // La lista esta vacia
+        if (actual == NULL)
         {
-            // La lista no tiene nodos
             *cabeza = nuevo;
+            printf("Nueva lista creada.\n");
         }
+
+        // La lista tiene uno o mas nodos
         else
         {
-            // La lista tiene al menos un nodo
-            previo = NULL;
-            actual = *cabeza;
-
             // Ciclo para recorrer el arreglo y posicionar actual en el nodo con numero mayor siguiente al nodo a ingresar
-            while (actual->dato < nuevo->dato && actual != NULL)
-            {
-                previo = actual;
-                actual = actual->siguiente;
-            }
-            previo->siguiente = nuevo;
-            nuevo->anterior = previo;
-            nuevo->siguiente = actual;
-            actual->anterior = nuevo;
 
-            //
-            //
-            //
-            //
-            // Solo faltaria verificar que pueda insertar al inicio
-            //
-            //
-            //
-            //
+            while (actual != NULL)
+            {
+                if(actual->dato < nuevo->dato){
+                    previo = actual;
+                    actual = actual->siguiente;
+                }else{
+                    break;
+                }
+            }
+
+            // Insertar al final
+            if (actual == NULL)
+            {
+                previo->siguiente = nuevo;
+                nuevo->anterior = previo;
+                nuevo->siguiente = actual;
+            }
+            // Ingresar al principio
+            else if (previo == NULL)
+            {
+                nuevo->anterior = NULL;
+                nuevo->siguiente = actual;
+                actual->anterior = nuevo;
+                *cabeza = nuevo;
+            }
+            // Caso de que sea por insertar en medio
+            else
+            {
+                previo->siguiente = nuevo;
+                nuevo->anterior = previo;
+                nuevo->siguiente = actual;
+                actual->anterior = nuevo;
+            }
+            printf("Se ingreso correctamente el nodo.\n");
         }
-        printf("Se ingreso correctamente el nodo.\n");
     }
     else
     {
         printf("No se logro alocar memoria para el nuevo nodo.\n");
     }
+
     system("pause");
     system("cls");
 }
