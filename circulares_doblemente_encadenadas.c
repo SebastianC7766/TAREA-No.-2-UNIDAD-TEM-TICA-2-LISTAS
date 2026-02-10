@@ -13,8 +13,8 @@ typedef struct nodo
 int solicitar_entero();
 float solicitar_flotante();
 
-void eliminar_elemento(NODO **,int);
-void agregar_elemento(NODO **,int);
+void eliminar_elemento(NODO **);
+void agregar_elemento(NODO **);
 
 int main()
 {
@@ -30,7 +30,7 @@ int solicitar_entero()
     int i, p, y, num;
     do
     {
-        printf("Introduzca un valor entero: ");
+        printf("Introduzca un valor entero positivo: ");
         fflush(stdin);
         gets(Aux); // se lee los datos introducidos
         y = strlen(Aux);
@@ -100,13 +100,13 @@ float solicitar_flotante()
 }
 
 //Se pasa como doble puntero en caso de que se quiera borrar el nodo al que apunta la cabeza
-void eliminar_elemento(NODO **cabeza,int dato)
+void eliminar_elemento(NODO **cabeza)
 {
 
 }
 
 //Se pasa como doble puntero en caso de que se quiera borrar el nodo al que apunta la cabeza
-void agregar_elemento(NODO **cabeza,int dato)
+void agregar_elemento(NODO **cabeza)
 {
 
 }
