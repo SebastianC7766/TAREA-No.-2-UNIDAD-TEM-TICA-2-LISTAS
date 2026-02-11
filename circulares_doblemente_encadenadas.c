@@ -231,6 +231,8 @@ void agregar_elemento(NODO **cabeza)
         if (actual == NULL)
         {
             *cabeza = nuevo;
+            nuevo->siguiente = nuevo;
+            nuevo->anterior = nuevo;
             printf("Nueva lista creada.\n");
         }
 
@@ -239,7 +241,7 @@ void agregar_elemento(NODO **cabeza)
         {
             // Ciclo para recorrer el arreglo y posicionar actual en el nodo con numero mayor siguiente al nodo a ingresar
 
-            while (actual != NULL)
+            do
             {
                 if (actual->dato < nuevo->dato)
                 {
@@ -250,10 +252,10 @@ void agregar_elemento(NODO **cabeza)
                 {
                     break;
                 }
-            }
+            } while (actual != *cabeza);
 
             // Insertar al final
-            if (actual == NULL)
+            if (previo->siguiente == *cabeza)
             {
                 previo->siguiente = nuevo;
                 nuevo->anterior = previo;
@@ -261,7 +263,7 @@ void agregar_elemento(NODO **cabeza)
                 (*cabeza)->anterior = nuevo;
             }
             // Ingresar al principio
-            else if (previo == NULL)
+            else if (actual == *cabeza)
             {
                 while (ultimo->siguiente != actual) {
                     ultimo = ultimo->siguiente;
