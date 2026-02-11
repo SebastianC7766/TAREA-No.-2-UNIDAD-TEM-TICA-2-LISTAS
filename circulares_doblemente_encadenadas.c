@@ -155,14 +155,14 @@ void eliminar_elemento(NODO **cabeza)
         dato = solicitar_entero();
 
         // recorrer la lista y parar en el nodo hallado (o hasta el final)
-        while (actual != NULL && actual->dato != dato)
+        while (actual->siguiente != *cabeza && actual->dato != dato)
         {
             previo = actual;
             actual = actual->siguiente;
         }
 
         // Llego al final sin hallarlo
-        if (actual == NULL)
+        if (actual->siguiente == *cabeza)
         {
             printf("No se encontro nodo con el valor ingresado.\n");
         }
@@ -171,10 +171,10 @@ void eliminar_elemento(NODO **cabeza)
         else
         {
             // El nodo encontrado fue el primero
-            if (previo == NULL)
+            if (previo == (*cabeza)->anterior)
             {
                 // Era el UNICO nodo
-                if (actual->siguiente == NULL)
+                if (actual->siguiente == (*cabeza)->anterior)
                 {
                     *cabeza = NULL;
 
@@ -182,6 +182,8 @@ void eliminar_elemento(NODO **cabeza)
                 }
                 else
                 {
+                    (actual->anterior)->siguiente = actual->siguiente;
+                    (actual->siguiente)->anterior = actual->anterior;
                     *cabeza = actual->siguiente;
                 }
 
@@ -190,12 +192,7 @@ void eliminar_elemento(NODO **cabeza)
             else
             {
                 previo->siguiente = actual->siguiente;
-
-                // el nodo hallado esta al final
-                if (actual->siguiente != NULL)
-                {
-                    (actual->siguiente)->anterior = previo;
-                }
+                (actual->siguiente)->anterior = previo;
             }
 
             // Borrar el nodo
@@ -242,7 +239,7 @@ void agregar_elemento(NODO **cabeza)
             // Ciclo para recorrer el arreglo y posicionar actual en el nodo con numero mayor siguiente al nodo a ingresar
 
             do
-            {
+            {                
                 if (actual->dato < nuevo->dato)
                 {
                     previo = actual;
@@ -254,34 +251,27 @@ void agregar_elemento(NODO **cabeza)
                 }
             } while (actual != *cabeza);
 
-            // Insertar al final
-            if (previo->siguiente == *cabeza)
+            //Insertar al inicio
+            if (actual == *cabeza && (nuevo->dato <= (*cabeza)->dato))
             {
-                previo->siguiente = nuevo;
-                nuevo->anterior = previo;
-                nuevo->siguiente = *cabeza;
-                (*cabeza)->anterior = nuevo;
+                 ultimo = (*cabeza)->anterior;
+                 nuevo->siguiente = *cabeza;
+                 nuevo->anterior = ultimo;
+                 ultimo->siguiente = nuevo;
+                 (*cabeza)->anterior = nuevo;
+                 *cabeza = nuevo;
             }
-            // Ingresar al principio
-            else if (actual == *cabeza)
-            {
-                while (ultimo->siguiente != actual) {
-                    ultimo = ultimo->siguiente;
-                }
-                nuevo->anterior = ultimo;
-                ultimo->siguiente = nuevo;
-                nuevo->siguiente = actual;
-                actual->anterior = nuevo;
-                *cabeza = nuevo;
-            }
-            // Caso de que sea por insertar en medio
+            //Insertar por el medio o por el final
             else
             {
-                previo->siguiente = nuevo;
-                nuevo->anterior = previo;
+                previo = actual->anterior;
                 nuevo->siguiente = actual;
+                nuevo->anterior = previo;
+                previo->siguiente = nuevo;
                 actual->anterior = nuevo;
+
             }
+
             printf("Se ingreso correctamente el nodo.\n");
         }
     }
